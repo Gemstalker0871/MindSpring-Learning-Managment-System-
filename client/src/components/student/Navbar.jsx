@@ -1,11 +1,15 @@
 import React from 'react'
 import { assets } from '../../assets/assets'
 import { Link } from 'react-router-dom'
+import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
 
 const Navbar = () => {
 
   const isCourseListPage = location.pathname.includes('/course-list')
 
+
+  const { openSignIn } = useClerk()
+  const { user } = useUser()
 
 
 
@@ -14,21 +18,34 @@ const Navbar = () => {
       <img src={assets.logo} alt="Logo" className='w-44 lg:32 cursor-pointer'/>
       <div className='hidden md:flex items-center gap-5 text-gray-500'>
         <div className='flex items-center gap-5'>
-          <button>Become Educator</button>
+          { user && 
+          <>
+
+           <button>Become Educator</button> |
           <Link to ='/my-enrollments'>My Enrollments</Link>
+          </>}
+
         </div>
-        <button className='bg-blue-600 text-white px-5 py-2 rounded-full' >Create Account</button>
+        { user ? <UserButton/> :
+          <button onClick={()=> openSignIn()} className='bg-blue-600 text-white px-5 py-2 rounded-full' >Create Account</button>}
 
       </div>
 
-      {/* for small screens */}
+      {/* For small screens */}
 
       <div className='md:hidden flex items-center gap-2 sm:gap-5 text-gray-500'>
-        <div>
-          <button>Become Educator</button>
+        <div className='flex items-center gap-1 sm:gap-2 max-sm:text-xs'>
+          { user && 
+          <>
+
+           <button>Become Educator</button> |
           <Link to ='/my-enrollments'>My Enrollments</Link>
+          </>}
         </div>
-        <button><img src={assets.user_icon} alt="" /></button>
+        {
+          user ? <UserButton/> : <button onClick={()=>openSignIn()}><img src={assets.user_icon} alt="" /></button>
+        }
+        
       </div>
     </div>
   )
