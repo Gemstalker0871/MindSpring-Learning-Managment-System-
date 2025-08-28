@@ -18,6 +18,8 @@ import StudentsEnrolled from './pages/educator/StudentsEnrolled'
 import Loading from './components/student/Loading'
 import Navbar from './components/student/Navbar'
 
+import "quill/dist/quill.snow.css";
+
 const App = () => {
 
   const isEducatorRoute = useMatch('/educator/*')
