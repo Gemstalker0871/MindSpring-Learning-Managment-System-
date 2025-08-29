@@ -5,6 +5,9 @@ import connectDB from './configs/mongodb.js'
 import { clerWebHooks } from './controllers/webhooks.js'
 import educatorRouter from './routes/educator.routes.js'
 import { clerkMiddleware } from '@clerk/express'
+import connectCloudinary from './configs/cloudinary.js'
+import courseRouter from './routes/course.routes.js'
+import userRouter from './routes/user.routes.js'
 
 //initialize express
 
@@ -12,6 +15,7 @@ const app = express()
 
 //connect to db
 await connectDB()
+await connectCloudinary()
 
 //Middlewares
 app.use(cors())
@@ -21,6 +25,8 @@ app.use(clerkMiddleware())
 app.get('/', (req, res) => res.send("Api working"))
 app.post('/clerk', express.json(), clerWebHooks)
 app.use('/api/educator', express.json(), educatorRouter)
+app.use('/api/course', express.json(), courseRouter)
+app.use('/api/user', express.json(), userRouter)
 
 //Port
 const PORT = process.env.PORT || 5000

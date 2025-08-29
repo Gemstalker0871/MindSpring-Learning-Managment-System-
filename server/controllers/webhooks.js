@@ -1,5 +1,5 @@
 import { Webhook } from "svix";
-import User from "../models/user.model.js";
+import User from "../models/User.model.js";
 
 //API xontroller function to manage clerkj with database
 
