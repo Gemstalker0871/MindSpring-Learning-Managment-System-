@@ -61,64 +61,48 @@ export const clerWebHooks = async (req, res) => {
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
 
+
 export const stripeWebhooks = async(request, response) => {
+    console.log("Stripe webhook hit!");
+  console.log("Headers:", request.headers);
+  console.log("Body length:", request.body.length);
 
-const sig = request.headers['stripe-signature'];
+  const sig = request.headers['stripe-signature'];
 
-let event;
-
-try {
+  let event;
+  try {
     event = Stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-}
-catch (err) {
-    response.status(400).send(`Webhook Error: ${err.message}`);
+    console.log("Stripe event type:", event.type);
+  } catch (err) {
+    console.log("Webhook signature verification failed:", err.message);
+    return response.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   switch (event.type) {
-    case 'payment_intent.succeeded': {
-  const paymentIntent = event.data.object;
-  const paymentIntentId = paymentIntent.id;
+    case 'payment_intent.succeeded':{
+      const paymentIntent = event.data.object;
+      const paymentIntentId = paymentIntent.id
 
-  // Fetch the Checkout Session reliably
-  const sessions = await stripeInstance.checkout.sessions.list({
-    payment_intent: paymentIntentId,
-    limit: 1
-  });
+      const session = await stripeInstance.checkout.sessions.list({
+        payment_intent: paymentIntentId
+      })
 
-  if (!sessions.data.length) {
-    console.log("No session found for payment intent:", paymentIntentId);
-    break;
-  }
+      const {purchaseId} = session.data[0].metadata;
 
-  const session = sessions.data[0];
-  const { purchaseId } = session.metadata;
+      const purchaseData = await Purchase.findById(purchaseId)
+      const userData = await User.findById(purchaseData.userId)
+      const courseData = await Course.findById(purchaseData.courseId.toString())
 
-  const purchaseData = await Purchase.findById(purchaseId);
-  if (!purchaseData) {
-    console.log("Purchase not found for ID:", purchaseId);
-    break;
-  }
+      courseData.enrolledStudents.push(userData._id)
+      await courseData.save()
 
-  const userData = await User.findById(purchaseData.userId);
-  const courseData = await Course.findById(purchaseData.courseId);
+      userData.enrolledCourses.push(courseData._id)
+      await userData.save()
 
-  // Use IDs instead of whole documents
-  if (!courseData.enrolledStudents.includes(userData._id)) {
-    courseData.enrolledStudents.push(userData._id);
-    await courseData.save();
-  }
+      purchaseData.status = 'completed'
+      await purchaseData.save()
 
-  if (!userData.enrolledCourses.includes(courseData._id)) {
-    userData.enrolledCourses.push(courseData._id);
-    await userData.save();
-  }
-
-  purchaseData.status = 'completed';
-  await purchaseData.save();
-
-  console.log(`Payment for purchase ${purchaseId} completed`);
-  break;
-}
+      break;}
     case 'payment_intent.payment_failed':{
       const paymentIntent = event.data.object;
       const paymentIntentId = paymentIntent.id
