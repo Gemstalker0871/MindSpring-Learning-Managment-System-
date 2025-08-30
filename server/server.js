@@ -16,12 +16,15 @@ import User from "./models/User.model.js"
 
 const app = express()
 
+
+app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
+
 //connect to db
 await connectDB()
 await connectCloudinary()
 
 
-app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
+
 
 //Middlewares
 app.use(cors())
