@@ -1,8 +1,8 @@
 import {clerkClient} from '@clerk/express'
-import Course from '../models/course.model.js'
+import Course from '../models/Course.model.js'
 import {v2 as cloudinary} from 'cloudinary'
 import { Purchase } from '../models/Purchase.model.js';
-import User from '../models/User.model.js';
+import User from '../models/User.model.js'
 
 
 //update role to educator
