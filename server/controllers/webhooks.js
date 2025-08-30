@@ -1,20 +1,10 @@
-// import { Webhook } from "svix";
-// import User from '../models/User.model.js'
-// import Stripe from "stripe";
-// import { Purchase } from "../models/Purchase.model.js";
-// import Course from "../models/course.model.js";
+import { Webhook } from "svix";
 
-import path from 'path';
-import { fileURLToPath } from 'url';
+import Stripe from "stripe";
+import { Purchase } from "../models/Purchase.model.js";
+import Course from "../models/course.model.js";
+import User from '../models/User.model.js'
 
-// convert import.meta.url to __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// then import your models using dynamic import
-import User from path.join(__dirname, '../models/User.model.js');
-import Course from path.join(__dirname, '../models/course.model.js');
-import { Purchase } from path.join(__dirname, '../models/Purchase.model.js');
 
 //API xontroller function to manage clerkj with database
 
