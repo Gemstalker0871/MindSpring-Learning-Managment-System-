@@ -23,5 +23,8 @@
     "nodemon": "^3.1.10",
     "stripe": "^18.5.0",
     "svix": "^1.42.0"
-  }
+  },
+  "_moduleAliases": {
+  "@models": "server/models"
+}
 }
