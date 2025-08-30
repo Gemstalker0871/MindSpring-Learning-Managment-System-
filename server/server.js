@@ -8,6 +8,7 @@ import { clerkMiddleware } from '@clerk/express'
 import connectCloudinary from './configs/cloudinary.js'
 import courseRouter from './routes/course.routes.js'
 import userRouter from './routes/user.routes.js'
+import './server/models/User.model.js';
 
 //initialize express
 
