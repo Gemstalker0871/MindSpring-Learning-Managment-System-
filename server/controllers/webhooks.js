@@ -75,30 +75,50 @@ catch (err) {
   }
 
   switch (event.type) {
-    case 'payment_intent.succeeded':{
-      const paymentIntent = event.data.object;
-      const paymentIntentId = paymentIntent.id
+    case 'payment_intent.succeeded': {
+  const paymentIntent = event.data.object;
+  const paymentIntentId = paymentIntent.id;
 
-      const session = await stripeInstance.checkout.sessions.list({
-        payment_intent: paymentIntentId
-      })
+  // Fetch the Checkout Session reliably
+  const sessions = await stripeInstance.checkout.sessions.list({
+    payment_intent: paymentIntentId,
+    limit: 1
+  });
 
-      const {purchaseId} = session.data[0].metadata;
+  if (!sessions.data.length) {
+    console.log("No session found for payment intent:", paymentIntentId);
+    break;
+  }
 
-      const purchaseData = await Purchase.findById(purchaseId)
-      const userData = await User.findById(purchaseData.userId)
-      const courseData = await Course.findById(purchaseData.courseId.toString())
+  const session = sessions.data[0];
+  const { purchaseId } = session.metadata;
 
-      courseData.enrolledStudents.push(userData)
-      await courseData.save()
+  const purchaseData = await Purchase.findById(purchaseId);
+  if (!purchaseData) {
+    console.log("Purchase not found for ID:", purchaseId);
+    break;
+  }
 
-      userData.enrolledCourses.push(courseData._id)
-      await userData.save()
+  const userData = await User.findById(purchaseData.userId);
+  const courseData = await Course.findById(purchaseData.courseId);
 
-      purchaseData.status = 'completed'
-      await purchaseData.save()
+  // Use IDs instead of whole documents
+  if (!courseData.enrolledStudents.includes(userData._id)) {
+    courseData.enrolledStudents.push(userData._id);
+    await courseData.save();
+  }
 
-      break;}
+  if (!userData.enrolledCourses.includes(courseData._id)) {
+    userData.enrolledCourses.push(courseData._id);
+    await userData.save();
+  }
+
+  purchaseData.status = 'completed';
+  await purchaseData.save();
+
+  console.log(`Payment for purchase ${purchaseId} completed`);
+  break;
+}
     case 'payment_intent.payment_failed':{
       const paymentIntent = event.data.object;
       const paymentIntentId = paymentIntent.id
