@@ -18,6 +18,10 @@ const app = express()
 
 
 app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
+app.post("/stripe/test", express.json(), (req, res) => {
+  console.log("Test hit:", req.body);
+  res.json({ success: true, received: req.body });
+});
 
 //connect to db
 await connectDB()
