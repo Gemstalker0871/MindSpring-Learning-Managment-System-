@@ -17,7 +17,12 @@ import User from "./models/User.model.js"
 const app = express()
 
 
-
+import bodyParser from "body-parser";
+app.post(
+  "/stripe",
+  bodyParser.raw({ type: "application/json" }),
+  stripeWebhooks
+);
 
 //connect to db
 await connectDB()
@@ -36,7 +41,6 @@ app.post('/clerk', express.json(), clerWebHooks)
 app.use('/api/educator', express.json(), educatorRouter)
 app.use('/api/course', express.json(), courseRouter)
 app.use('/api/user', express.json(), userRouter)
-app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
 
 
 //Port
