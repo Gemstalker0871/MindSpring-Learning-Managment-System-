@@ -24,7 +24,7 @@ export const clerWebHooks = async (req, res) => {
             case 'user.created': {
                 const userData = {
                     _id: data.id,
-                    email: data.email_addresses[0].email_address,
+                    email: data.email_address[0].email_address,
                     name: data.first_name + ' ' + data.last_name,
                     imageUrl: data.image_url,
                 }
@@ -71,7 +71,7 @@ export const stripeWebhooks = async(request, response) => {
 
   let event;
   try {
-    event = Stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    event = stripeInstance.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     console.log("Stripe event type:", event.type);
   } catch (err) {
     console.log("Webhook signature verification failed:", err.message);
