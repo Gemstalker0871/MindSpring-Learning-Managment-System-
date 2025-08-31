@@ -33,7 +33,7 @@ const CoursesList = () => {
         <div>
           <h1 className='text-4xl font-semibold text-gray-800'>Course List</h1>
           <p className='text-gray-500'>
-          <span onClick={()=> navigate('/')} className='text-blue-600 cursor-pointer'> Home</span> / <span>Course List</span>
+          <span onClick={()=> navigate('/')} className='text-orange-600 cursor-pointer'> Home</span> / <span>Course List</span>
           </p>
         </div>
         <SearchBar data = {input}/>

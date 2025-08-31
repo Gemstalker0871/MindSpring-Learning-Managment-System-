@@ -129,7 +129,7 @@ const Player = () => {
                             <div className='flex gap-2'>
                               {lecture.lectureUrl && <p onClick={()=> setPlayerData({
                                 ...lecture, chapter: index + 1, lecture: i + 1, lectureId: lecture._id
-                              })} className='text-blue-500 cursor-pointer'>Watch</p>}
+                              })} className='text-orange-500 cursor-pointer'>Watch</p>}
                               <p>{humanizeDuration( lecture.lectureDuration * 60 * 1000, {units: ['h', 'm']})} </p>
                             </div>
                           </div>
@@ -155,7 +155,7 @@ const Player = () => {
           <p>
             {playerData.chapter}.{playerData.lecture}  {playerData.lectureTitle}
           </p>
-          <button onClick={()=> markLectureAsCompleted(playerData.lectureId)} className='text-blue-600'>{progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark Complete'}</button>
+          <button onClick={()=> markLectureAsCompleted(playerData.lectureId)} className='text-orange-600'>{progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark Complete'}</button>
         </div>
         </div>
         )

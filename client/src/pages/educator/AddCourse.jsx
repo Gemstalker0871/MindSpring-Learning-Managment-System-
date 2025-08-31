@@ -164,7 +164,7 @@ useEffect(()=>{
           <div className='flex md:flex-row flex-col items-center gap-3'>
             <p>Course Thumbnail</p>
             <label htmlFor="thumbnailImage" className='flex items-center gap-3'>
-              <img src={assets.file_upload_icon} alt="" className='p-3 bg-blue-500 rounded'/>
+              <img src={assets.file_upload_icon} alt="" className='p-3 bg-orange-500 rounded'/>
               <input type="file" id='thumbnailImage' onChange={e => setImage(e.target.files[0])} accept='image/*' hidden />
               <img src={image ? URL.createObjectURL(image) : ''} alt="" className='max-h-10' />
             </label>
@@ -194,7 +194,7 @@ useEffect(()=>{
                 <div className='p-4'>
                   {chapter.chapterContent.map((lecture, lectureIndex)=>(
                     <div key={lectureIndex} className='flex justify-between items-center mb-2'>
-                      <span>{lectureIndex + 1} {lecture.lectureTitle} - {lecture.lectureDuration} mins - <a href={lecture.lectureUrl} target='_blank' className='text-blue-500'>Link</a> - {lecture.isPreviewFree ? 'Free Preview' : 'Paid'}</span>
+                      <span>{lectureIndex + 1} {lecture.lectureTitle} - {lecture.lectureDuration} mins - <a href={lecture.lectureUrl} target='_blank' className='text-orange-500'>Link</a> - {lecture.isPreviewFree ? 'Free Preview' : 'Paid'}</span>
                       <img src={assets.cross_icon} alt="" className='cursor-pointer' onClick={() => handleLecture('remove', chapter.chapterId, lectureIndex)}/>
                     </div>
                   ))}
@@ -205,7 +205,7 @@ useEffect(()=>{
 
             </div>
           ))}
-          <div className='flex justify-center items-center bg-blue-100 p-2 rounded-lg cursor-pointer' onClick={() => handleChapter('add')}>+ Add Chapter</div>
+          <div className='flex justify-center items-center bg-orange-100 p-2 rounded-lg cursor-pointer' onClick={() => handleChapter('add')}>+ Add Chapter</div>
 
           {showPopup && (
             <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
@@ -233,7 +233,7 @@ useEffect(()=>{
                   <input type="checkbox" className='mt-1 scale-125' checked={lectureDetails.isPreviewFree} onChange={(e) => setLectureDetails({...lectureDetails, isPreviewFree: e.target.checked})}/>
                 </div>
 
-                <button onClick={addLecture} type='button' className='w-full bg-blue-400 text-white px-4 py-2 rounded'>Add</button>
+                <button onClick={addLecture} type='button' className='w-full bg-orange-400 text-white px-4 py-2 rounded'>Add</button>
 
                 <img src={assets.cross_icon} onClick={() => setShowPopup(false)} alt="" className='absolute top-4 right-4 w-4 cursor-pointer'/>
 
