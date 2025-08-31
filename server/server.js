@@ -17,11 +17,7 @@ import User from "./models/User.model.js"
 const app = express()
 
 
-app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
-app.post("/stripe/test", express.json(), (req, res) => {
-  console.log("Test hit:", req.body);
-  res.json({ success: true, received: req.body });
-});
+
 
 //connect to db
 await connectDB()
@@ -40,6 +36,7 @@ app.post('/clerk', express.json(), clerWebHooks)
 app.use('/api/educator', express.json(), educatorRouter)
 app.use('/api/course', express.json(), courseRouter)
 app.use('/api/user', express.json(), userRouter)
+app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
 
 
 //Port
